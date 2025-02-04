@@ -1,0 +1,72 @@
+---
+title: "Rapport Analyse des personnages de Star Wars"
+author: "Esteban FARAVELLON"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+#J'ai un problème avce la biblio je ne comprends pas 
+---
+
+---
+
+---
+
+  Nous utilisons le dataset intégré "starwars" disponible dans "{dplyr}".
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE)
+
+# Charger les packages
+library(dplyr)
+library(ggplot2)
+library(knitr)
+
+# Charger le dataset starwars
+data("starwars", package = "dplyr")
+```
+
+```{r test-starwars}
+# Vérifier si le dataset est bien disponible
+head(starwars)
+dim(starwars)
+```
+
+  # Introduction
+  
+  Ce rapport analyse **les caractéristiques des personnages de Star Wars**, en mettant un accent particulier sur leur **taille** à l’aide du package `ggplot2`.  
+Nous allons explorer la distribution des tailles en fonction des espèces pour mieux comprendre les variations morphologiques entre les personnages.
+
+
+**Nombre total de personnages étudiés** : `r nrow(starwars)`
+
+```{r graph-starwars, fig.width=8, fig.height=6}
+# Créer le graphique avec ggplot2
+ggplot(starwars, aes(x = species, y = height, color = species)) +
+  geom_point(size = 5, alpha = 0.7) +  # Taille et transparence des points
+  labs(
+    title = "Analyse de la taille des personnages de Star Wars",
+    subtitle = "Comparaison par espèce",
+    x = "",
+    y = "Taille (cm)"
+  ) +
+  theme_minimal(base_size = 14) +  # Style minimaliste
+  theme(
+    text = element_text(color = "red"),  # Titres et textes en rouge
+    axis.text.x = element_text(angle = 45, hjust = 1, color = "black"),  # Rotation des labels X
+    axis.text.y = element_text(color = "black"),  # Axe Y en noir
+    legend.position = "right",  # Légende à droite
+    legend.text = element_text(color = "black"),
+    panel.grid.major = element_line(color = "white", linetype = "dotted")  # Grille en pointillé blanc
+  ) +
+  scale_color_manual(values = rainbow(length(unique(starwars$species))))  # Couleurs distinctes par espèce
+```
+
+# Conclusion
+
+À travers cette analyse, nous avons exploré la **répartition des tailles des personnages de Star Wars** en fonction de leurs espèces. Grâce à la visualisation avec `ggplot2`, nous avons pu mettre en évidence des différences marquées entre les groupes.  
+
+Les **humains** et certaines autres espèces humanoïdes présentent une large variabilité de taille, tandis que les **droïdes** comme R2-D2 et BB-8 sont significativement plus petits. Les personnages emblématiques tels que **Darth Vader** et **Chewbacca** se démarquent par leur stature imposante, bien au-dessus de la moyenne.  
+
+ 
