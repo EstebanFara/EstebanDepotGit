@@ -1,0 +1,109 @@
+---
+title: "Les VPN : Avantages, Inconvénients et Applications en Data Science"
+author: "Esteban FARAVELLON"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  pdf_document: default
+  html_document: default
+bibliography: Infobiblio.bib
+---
+
+# Introduction
+
+Les Réseaux Privés Virtuels (**VPN**) sont devenus des outils essentiels pour assurer la confidentialité et la sécurité lors de la navigation sur Internet.  
+Ils permettent de protéger les données personnelles, de contourner les restrictions géographiques et d'améliorer l'anonymat en ligne.  
+Cependant, leurs utilisations présentent également des inconvénients, tels que des réductions potentielles de la vitesse de connexion et des préoccupations concernant la confiance envers les fournisseurs de services.  
+De plus, les VPN jouent un rôle significatif dans le domaine de la **Data Science**, notamment en matière de protection des données [@security_avantages_2023; @cohen_vpn_2023; @noauthor_avantages_2023].
+
+---
+
+# 1. Fonctionnement des VPN
+
+## 1.1 Qu'est-ce qu'un VPN ?
+
+Un **VPN** crée un tunnel chiffré entre l'appareil de l'utilisateur et un serveur distant, masquant ainsi l'adresse IP réelle et sécurisant les données transmises.  
+Cette technologie est particulièrement utile lors de l'utilisation de réseaux Wi-Fi publics, où les risques de cyberattaques sont élevés.  
+En chiffrant les données, le VPN empêche les tiers malveillants d'accéder aux informations sensibles de l'utilisateur[@security_avantages_2023].
+
+## 1.2 Contournement des restrictions géographiques
+
+En masquant l'adresse IP réelle et en la remplaçant par celle du serveur VPN, les utilisateurs peuvent accéder à du contenu restreint ou censuré dans leur région, comme certains services de streaming ou sites web[@noauthor_avantages_2023].
+
+---
+
+# 2. Avantages des VPN
+
+## 2.1 Sécurité et confidentialité accrues
+
+Les VPN chiffrent les données de l'utilisateur, rendant ainsi ses activités en ligne plus sécurisées et privées.  
+Cela est particulièrement important lors de l'accès à des informations sensibles sur des réseaux non sécurisés[@security_avantages_2023].
+
+## 2.2 Anonymat en ligne
+
+En masquant l'adresse IP de l'utilisateur, les VPN rendent plus difficile le suivi de ses activités en ligne par des tiers[@noauthor_avantages_2023].
+
+---
+
+# 3. Inconvénients des VPN
+
+## 3.1 Réduction de la vitesse de connexion
+
+Le chiffrement des données et le routage via un serveur distant peuvent entraîner une diminution de la vitesse de connexion.  
+La performance dépend de la qualité du service VPN et de la distance entre l'utilisateur et le serveur[@noauthor_avantages_2023].
+
+## 3.2 Confiance envers le fournisseur
+
+En utilisant un VPN, l'utilisateur confie ses données au fournisseur du service.  
+Il est donc crucial de choisir un fournisseur de confiance qui respecte la vie privée et ne collecte pas de données sensibles[@security_avantages_2023].
+
+---
+
+# 4. VPN et Data Science
+
+Dans le domaine de la **Data Science**, les VPN jouent un rôle crucial en matière de protection des données.  
+Ils permettent aux data scientists d'accéder en toute sécurité à des bases de données distantes, de protéger les transferts de données sensibles et d'assurer la confidentialité lors de l'analyse de données.  
+De plus, les VPN peuvent aider à contourner les restrictions géographiques lors de la collecte de données sur Internet[@cohen_vpn_2023].
+
+---
+
+
+# 5. Visualisation : Impact des VPN sur la vitesse
+
+Tous les VPN n'ont pas la même vitesse de télégargement à l'international et au Etats-Unis (Local dans le graphique). Nous allons visualiser la vitesse moyenne de certains VPN populaires à l'aide de `ggplot2` [@migliano_vpn_2025]:
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(tidyr)
+
+# Données sur la vitesse des VPN
+vpn_data <- data.frame(
+  VPN = factor(c("Hotspot Shield", "IPVanish",  "Hide.me","ExpressVPN", "NordVPN"),
+               levels = c("Hotspot Shield", "IPVanish",  "Hide.me","ExpressVPN", "NordVPN")),
+  Local = c(98, 95, 97, 96, 95), 
+  Internationale = c(99, 88, 85, 86, 86) 
+)
+
+# Réorganiser les données pour ggplot
+vpn_data_long <- pivot_longer(vpn_data, cols = c(Local, Internationale), 
+                              names_to = "Type", values_to = "Vitesse")
+
+# Création du graphique avec zoom sur 70 à 100 Mbps
+ggplot(vpn_data_long, aes(x = Vitesse, y = reorder(VPN, Vitesse), fill = Type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("orange", "lightblue")) +
+  theme_minimal() +
+  labs(title = "Vitesse de téléchargement des VPN",
+       x = "Vitesse de téléchargement (Mbps)", y = "Service VPN",
+       fill = "Type de connexion") +
+  theme(legend.position = "bottom") +
+  coord_cartesian(xlim = c(70, 100))
+```
+
+La vitesse des VPN est homogène bien que Hotspot Shiel sort un peu plus du lot à l'international.
+
+# 6 Conclusion
+
+Les VPN offretn une solution efficace pour renforcer la sécurité et la confidentialité en ligne, tout en permettant de contourner certaines restrictions géographiques. Cependant, leur utilisation présente aussi des inconvénients, notamment en termes de vitesse et de confiance envers les fournisseurs de services.
+
+# 7. Bibliographie :
+
